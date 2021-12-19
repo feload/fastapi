@@ -7,9 +7,10 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from app.database import get_db
 from . import schemas, models
+from .config import settings
 
 # secret_key
-SECRET_KEY = "abc6udyu788wn37yjf73j37d6wuhd73teoe0l2ls0fiwjkdefye8"
+SECRET_KEY = settings.FASTAPI_SECRET_KEY
 
 # algorithm
 ALGORITHM = "HS256"
