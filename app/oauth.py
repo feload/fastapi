@@ -13,10 +13,10 @@ from .config import settings
 SECRET_KEY = settings.FASTAPI_SECRET_KEY
 
 # algorithm
-ALGORITHM = "HS256"
+AUTH_ALGORITHM = settings.FASTAPI_AUTH_ALGORITHM
 
 # expiration time
-ACCESS_TOKEN_EXPIRATION_MINUTES = 120
+ACCESS_TOKEN_EXPIRATION_MINUTES = settings.FASTAPI_ACCESS_TOKEN_EXPIRATION_MINUTES
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl="login", tokenUrl="login")
@@ -27,7 +27,7 @@ def create_access_token(data: dict):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRATION_MINUTES)
     data_copy.update({"exp": expire})
 
-    encoded_jwt = jwt.encode(data_copy, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(data_copy, SECRET_KEY, algorithm=AUTH_ALGORITHM)
     return encoded_jwt
 
 
@@ -35,7 +35,8 @@ def verify_access_token(token: str, credentials_exception):
 
     try:
 
-        decoded_jwt = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        decoded_jwt = jwt.decode(
+            token, SECRET_KEY, algorithms=[AUTH_ALGORITHM])
         id = decoded_jwt.get("user_id")
 
         if not id:

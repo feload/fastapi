@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import TIMESTAMP
-from sqlalchemy.sql.expression import text
+from sqlalchemy.sql.expression import false, null, text
 from .database import Base
 
 
@@ -31,3 +31,12 @@ class Post(Base):
         "users.id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User")
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"),
+                     nullable=False, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"),
+                     nullable=False, primary_key=True)

@@ -1,5 +1,4 @@
 from fastapi import Depends, status, HTTPException, APIRouter
-from fastapi.security import oauth2
 from sqlalchemy.orm import Session
 
 from app import oauth
@@ -25,8 +24,6 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db), current
 
 @router.get("/users/{id}", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
 def get_user(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth.get_current_user)):
-
-    print(current_user)
 
     user_query = db.query(models.User).filter(models.User.id == id)
     user = user_query.first()
